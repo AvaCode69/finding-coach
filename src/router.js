@@ -1,46 +1,46 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'
 
-import CoachDetails from './pages/coaches/CouchDetail.vue';
-import CoachList from './pages/coaches/CoachesList.vue';
-import CoachRegistration from './pages/coaches/CoachRegistration.vue';
-import ContactCoach from './pages/requests/ContactCoach.vue';
-import RequestsReceived from './pages/requests/RequestsReceived.vue';
-import NotFound from './pages/NotFound.vue';
+import CoachDetails from './pages/coaches/CouchDetail.vue'
+import CoachesList from './pages/coaches/CoachesList.vue'
+import CoachRegistration from './pages/coaches/CoachRegistration.vue'
+import ContactCoach from './pages/requests/ContactCoach.vue'
+import RequestsReceived from './pages/requests/RequestsReceived.vue'
+import NotFound from './pages/NotFound.vue'
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
-      redirect: '/coaches',
+      redirect: '/coaches'
     },
     {
       path: '/coaches',
-      component: CoachList,
+      component: CoachesList
     },
     {
       path: '/coaches/:id',
-      component: ContactCoach,
+      component: CoachDetails,
       children: [
         {
-          path: '/contact',
-          component: CoachDetails,
-        },
-      ],
+          path: 'contact',
+          component: ContactCoach
+        }
+      ]
     },
     {
       path: '/register',
-      component: CoachRegistration,
+      component: CoachRegistration
     },
     {
       path: '/requests',
-      component: RequestsReceived,
+      component: RequestsReceived
     },
     {
       path: '/:notFound(.*)',
-      component: NotFound,
-    },
-  ],
-});
+      component: NotFound
+    }
+  ]
+})
 
-export default router;
+export default router

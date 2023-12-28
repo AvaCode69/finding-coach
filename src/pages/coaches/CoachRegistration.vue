@@ -1,5 +1,5 @@
 <template>
-  <h1>content coach</h1>
+  <h1>register</h1>
 </template>
 
 <script>
