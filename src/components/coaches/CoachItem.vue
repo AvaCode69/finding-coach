@@ -26,11 +26,12 @@ export default {
       return this.coachInfo.firstName + ' ' + this.coachInfo.lastName
     },
     coachContactLink() {
-      return this.$route.path + '/' + this.coachInfo.id
+      return this.$route.path + '/' + this.coachInfo.id + '/contact'
+
       //   return '/coaches/' + this.coachInfo.id + '/contact'
     },
     coachDetailsLink() {
-      return this.$route.path + '/' + this.coachInfo.id + '/contact'
+      return this.$route.path + '/' + this.coachInfo.id
 
       //  return '/coaches/' + this.coachInfo.id
     }
