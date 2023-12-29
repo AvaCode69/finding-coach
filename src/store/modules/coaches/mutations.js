@@ -1,1 +1,6 @@
-export default {}
+// mutations.js
+export default {
+  registerCoach(state, payload) {
+    state.coaches.push(payload)
+  }
+}
