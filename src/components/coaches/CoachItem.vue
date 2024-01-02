@@ -23,6 +23,7 @@ export default {
   },
   computed: {
     fullName() {
+      console.log(this.coachInfo.firstName)
       return this.coachInfo.firstName + ' ' + this.coachInfo.lastName
     },
     coachContactLink() {
