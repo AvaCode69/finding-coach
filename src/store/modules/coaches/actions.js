@@ -25,7 +25,30 @@ export default {
       ...coachData,
       id: userId
     })
+  },
+  async loadCoaches(context) {
+    const response = await fetch(
+      `https://find-coach-a01de-default-rtdb.firebaseio.com/coaches.jso `
+    )
+    const responseData = await response.json()
 
-    context.commit('registerCoach', coachData)
+    if (!response.ok) {
+      const error = new Error(response.message || 'Failed to fetch!')
+      throw error
+    }
+    const coaches = []
+
+    for (const key in responseData) {
+      const coach = {
+        id: key,
+        firstName: responseData[key].first,
+        lastName: responseData[key].last,
+        description: responseData[key].desc,
+        hourlyRate: responseData[key].rate,
+        areas: responseData[key].areas
+      }
+      coaches.push(coach)
+    }
+    context.commit('setCoaches', coaches)
   }
 }
