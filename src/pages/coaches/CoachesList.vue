@@ -5,10 +5,10 @@
   <section>
     <coach-filter @change-filter="setFilters"></coach-filter>
   </section>
-  <base-card>
-    <section>
+  <section>
+    <base-card>
       <div class="controls">
-        <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
+        <base-button mode="outline" @click="loadCoaches(true)">Refresh</base-button>
         <base-button v-if="!isCoach && !isLoading" link to="/register"
           >Register as Coach</base-button
         >
@@ -17,23 +17,29 @@
         <base-spinner></base-spinner>
       </div>
       <ul v-else-if="hasCoaches">
-        <coach-item v-for="coach in filterCoaches" :key="coach.id" :coachInfo="coach"></coach-item>
+        <coach-item
+          v-for="coach in filteredCoaches"
+          :key="coach.id"
+          :id="coach.id"
+          :first-name="coach.firstName"
+          :last-name="coach.lastName"
+          :rate="coach.hourlyRate"
+          :areas="coach.areas"
+        ></coach-item>
       </ul>
-      <h3 v-else>No coaches found</h3>
-    </section>
-  </base-card>
+      <h3 v-else>No coaches found.</h3>
+    </base-card>
+  </section>
 </template>
 
 <script>
-import CoachFilter from '@/components/coaches/CoachFilter.vue'
 import CoachItem from '../../components/coaches/CoachItem.vue'
-import BaseDialog from '@/components/ui/BaseDialog.vue'
+import CoachFilter from '../../components/coaches/CoachFilter.vue'
 
 export default {
   components: {
     CoachItem,
-    CoachFilter,
-    BaseDialog
+    CoachFilter
   },
   data() {
     return {
@@ -50,39 +56,36 @@ export default {
     isCoach() {
       return this.$store.getters['coaches/isCoach']
     },
-    filterCoaches() {
+    filteredCoaches() {
       const coaches = this.$store.getters['coaches/coaches']
       return coaches.filter((coach) => {
-        if (Array.isArray(coach.areas)) {
-          if (this.activeFilters.frontend && coach.areas.includes('frontend')) {
-            return true
-          }
-          if (this.activeFilters.backend && coach.areas.includes('backend')) {
-            return true
-          }
-          if (this.activeFilters.career && coach.areas.includes('career')) {
-            return true
-          }
+        if (this.activeFilters.frontend && coach.areas.includes('frontend')) {
+          return true
+        }
+        if (this.activeFilters.backend && coach.areas.includes('backend')) {
+          return true
+        }
+        if (this.activeFilters.career && coach.areas.includes('career')) {
+          return true
         }
         return false
       })
     },
-
     hasCoaches() {
       return !this.isLoading && this.$store.getters['coaches/hasCoaches']
     }
-
-    //...mapGetters('coaches', ['hasCoaches'])
   },
-
+  created() {
+    this.loadCoaches()
+  },
   methods: {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters
     },
-    async loadCoaches() {
+    async loadCoaches(refresh = false) {
       this.isLoading = true
       try {
-        await this.$store.dispatch('coaches/loadCoaches')
+        await this.$store.dispatch('coaches/loadCoaches', { forceRefresh: refresh })
       } catch (error) {
         this.error = error.message || 'Something went wrong!'
       }

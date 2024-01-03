@@ -1,24 +1,18 @@
 <template>
   <li>
     <div>
-      <a :href="emailLink">{{ request.email }}</a>
+      <a :href="emailLink">{{ email }}</a>
     </div>
-    <p>{{ request.message }}</p>
+    <p>{{ message }}</p>
   </li>
 </template>
 
 <script>
 export default {
-  //  props: ['email', 'message'],
-  props: {
-    request: {
-      type: Object,
-      required: true
-    }
-  },
+  props: ['email', 'message'],
   computed: {
     emailLink() {
-      return 'mailto:' + this.request.email
+      return 'mailto:' + this.email
     }
   }
 }

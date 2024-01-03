@@ -8,6 +8,7 @@ export default {
       hourlyRate: data.rate,
       areas: data.areas
     }
+
     const response = await fetch(
       `https://find-coach-a01de-default-rtdb.firebaseio.com/coaches/${userId}.json`,
       {
@@ -15,10 +16,11 @@ export default {
         body: JSON.stringify(coachData)
       }
     )
-    //  const responseData = await response.json() ;
+
+    // const responseData = await response.json();
 
     if (!response.ok) {
-      // error...
+      // error ...
     }
 
     context.commit('registerCoach', {
@@ -26,29 +28,36 @@ export default {
       id: userId
     })
   },
-  async loadCoaches(context) {
+  async loadCoaches(context, payload) {
+    if (!payload.forceRefresh && !context.getters.shouldUpdate) {
+      return
+    }
+
     const response = await fetch(
-      `https://find-coach-a01de-default-rtdb.firebaseio.com/coaches.jso `
+      `https://find-coach-a01de-default-rtdb.firebaseio.com/coaches.json`
     )
     const responseData = await response.json()
 
     if (!response.ok) {
-      const error = new Error(response.message || 'Failed to fetch!')
+      const error = new Error(responseData.message || 'Failed to fetch!')
       throw error
     }
+
     const coaches = []
 
     for (const key in responseData) {
       const coach = {
         id: key,
-        firstName: responseData[key].first,
-        lastName: responseData[key].last,
-        description: responseData[key].desc,
-        hourlyRate: responseData[key].rate,
+        firstName: responseData[key].firstName,
+        lastName: responseData[key].lastName,
+        description: responseData[key].description,
+        hourlyRate: responseData[key].hourlyRate,
         areas: responseData[key].areas
       }
       coaches.push(coach)
     }
-    context.commit('setCoaches', coaches)
+
+    context.commit('setCoaches', coaches) // first one is mutations name and second one is data variable
+    context.commit('setFetchTimestamp')
   }
 }
