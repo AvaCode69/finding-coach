@@ -57,7 +57,7 @@ export default {
       coaches.push(coach)
     }
 
-    context.commit('setCoaches', coaches) // first one is mutations name and second one is data variable
+    context.commit('setCoaches', coaches)
     context.commit('setFetchTimestamp')
   }
 }
