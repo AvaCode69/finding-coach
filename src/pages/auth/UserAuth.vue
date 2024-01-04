@@ -73,13 +73,9 @@ export default {
       }
       try {
         if (this.mode === 'login') {
-          await this.$store.dispatch('login', {
-            actionPayload
-          })
+          await this.$store.dispatch('login', actionPayload)
         } else {
-          await this.$store.dispatch('signup', {
-            actionPayload
-          })
+          await this.$store.dispatch('signup', actionPayload)
         }
       } catch (error) {
         this.error = error.message || 'failed to authenticated ! try later'
