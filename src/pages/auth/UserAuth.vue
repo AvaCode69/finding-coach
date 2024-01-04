@@ -67,14 +67,18 @@ export default {
         return
       }
       this.isLoading = true
-
+      const actionPayload = {
+        email: this.email,
+        password: this.password
+      }
       try {
         if (this.mode === 'login') {
-          // ...
+          await this.$store.dispatch('login', {
+            actionPayload
+          })
         } else {
           await this.$store.dispatch('signup', {
-            email: this.email,
-            password: this.password
+            actionPayload
           })
         }
       } catch (error) {
@@ -83,15 +87,16 @@ export default {
 
       this.isLoading = false
     },
-    handleError() {
-      this.error = null
-    },
+
     switchAuthMode() {
       if (this.mode === 'login') {
         this.mode = 'signup'
       } else {
         this.mode = 'login'
       }
+    },
+    handleError() {
+      this.error = null
     }
   }
 }
