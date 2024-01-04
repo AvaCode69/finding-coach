@@ -31,7 +31,8 @@ export default {
   },
   methods: {
     isLogout() {
-      return this.$store.dispatch('logout')
+      this.$store.dispatch('logout')
+      this.$router.replace('/coaches')
     }
   }
 }
