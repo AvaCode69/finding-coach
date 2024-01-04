@@ -1,9 +1,9 @@
 <template>
   <div>
-    <base-dialog :show="!!error" title="An error occurred!" @close="handleError"
-      ><p>{{ error }}</p></base-dialog
-    >
-    <base-dialog :show="isLoading" :title="Authenticating" fixed>
+    <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+      <p>{{ error }}</p>
+    </base-dialog>
+    <base-dialog :show="isLoading" title="Authenticating..." fixed>
       <base-spinner></base-spinner>
     </base-dialog>
     <base-card>
@@ -17,7 +17,7 @@
           <input type="password" id="password" v-model.trim="password" />
         </div>
         <p v-if="!formIsValid">
-          Please enter a valid email and password ( password must be at least 6 characters long).
+          Please enter a valid email and password (must be at least 6 characters long).
         </p>
         <base-button>{{ submitButtonCaption }}</base-button>
         <base-button type="button" mode="flat" @click="switchAuthMode">{{
@@ -29,10 +29,7 @@
 </template>
 
 <script>
-import BaseDialog from '@/components/ui/BaseDialog.vue'
-import BaseSpinner from '@/components/ui/BaseSpinner.vue'
 export default {
-  components: { BaseDialog, BaseSpinner },
   data() {
     return {
       email: '',
@@ -66,24 +63,26 @@ export default {
         this.formIsValid = false
         return
       }
+
       this.isLoading = true
+
       const actionPayload = {
         email: this.email,
         password: this.password
       }
+
       try {
         if (this.mode === 'login') {
           await this.$store.dispatch('login', actionPayload)
         } else {
           await this.$store.dispatch('signup', actionPayload)
         }
-      } catch (error) {
-        this.error = error.message || 'failed to authenticated ! try later'
+      } catch (err) {
+        this.error = err.message || 'Failed to authenticate, try later.'
       }
 
       this.isLoading = false
     },
-
     switchAuthMode() {
       if (this.mode === 'login') {
         this.mode = 'signup'
